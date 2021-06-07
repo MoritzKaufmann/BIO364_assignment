@@ -77,7 +77,7 @@ ui = shinyUI(fluidPage(
   fluidRow(
     column(8, offset = 2,
            h3('This app shows the bifurcation diagram, the Lyapanuv exponent, the logistic map and the cobweb plot
-                  of the function F(x) = Rx(1-x). The growth factor r can be adjusted via the sliders. The starting value for the
+                  of the logistic map. The growth factor r can be adjusted via the sliders. The starting value for the
                   logistic map is set to 0.01. This app was created by Moritz Kaufmann for the assignemt of the course Physisc of Life from UZH.'))
   ),
   br(),
