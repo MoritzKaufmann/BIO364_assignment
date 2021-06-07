@@ -69,7 +69,7 @@ logistic.cobweb <- function(r, N=100) {
 ui = shinyUI(fluidPage(
   # Application title
   column(3, offset = 4,
-         titlePanel(main=expression('title'[2])))
+         titlePanel("Logistic Map: f(x) = Rx(1-x)")
   ),
   br(),
   
@@ -77,9 +77,7 @@ ui = shinyUI(fluidPage(
   fluidRow(
     column(8, offset = 2,
            h3('This app shows the bifurcation diagram, the Lyapanuv exponent, the logistic map and the cobweb plot
-                  of the function F(x) = Rx(1-x). The growth factor r can be adjusted via the sliders. The purpose of this app is to
-                  visualize the chaotis behavior of the logistic function. One can choose interesting grothrates according to the Lyapunuv exponent and then
-                  plot the corresponding coweb plot or the logistic function.This app was created 
+                  of the function F(x) = Rx(1-x). The growth factor r can be adjusted via the sliders. This app was created 
                   by Moritz Kaufmann for the assignemt of the course Physisc of Life from UZH.'))
   ),
   br(),
