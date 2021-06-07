@@ -85,7 +85,7 @@ ui = shinyUI(fluidPage(
   #Add the layout to show the bifurcation diagram
   h3('Bifurcation diagram of the logistic map'),
   fluidRow(
-    column(8, offset = 2,
+    column(10, offset = 2,
            img(src="bifurcation.png", height="700" ) )),
   br(),
   
