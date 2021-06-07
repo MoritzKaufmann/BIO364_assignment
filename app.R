@@ -1,4 +1,5 @@
-
+#This script is part of the asignment for BIO 364: The physics of life from the university of Zürich
+#The script was written by Moritz Kaufmann 07.06.21
 
 #load the needed packages
 library(ggplot2)
@@ -8,10 +9,13 @@ library(tidyr)
 library(Rfast)
 library(shiny)
 
-
+#set a seed for reproducible results
 set.seed(1234)
 
+#
 #create the function for the logistic map
+#the function was written by Nicole Radziwill and found on
+#https://qualityandinnovation.com/wp-content/uploads/2019/09/logistic-growth.html
 logistic.map <- function(r, x, N, M) {
   ## r: bifurcation parameter
   ## x: initial value, something greater than 0 and less than 1
@@ -28,6 +32,8 @@ logistic.map <- function(r, x, N, M) {
 
 
 #create a function to draw a cobweb diagram
+#the function was written by Nicole Radziwill and found on
+#https://qualityandinnovation.com/wp-content/uploads/2019/09/logistic-growth.html
 logistic.cobweb <- function(r, N=100) {
   # code adapted from http://bayesianbiologist.com/tag/cobweb-plot/
   x<- seq(0,1,length=100)
@@ -58,36 +64,33 @@ logistic.cobweb <- function(r, N=100) {
   p + geom_segment(data=seg_df, aes(x=x, xend=xend, y=y, yend=yend))+theme_bw()
 }
 
-#####################################################################################################################################################
+#create the layout for the shiny app
+# Add the title to the Shiny app
 ui = shinyUI(fluidPage(
-  # titlePanel and sidebarLayout are the two most popular elements to add to fluidPage.
-  # They create a basic Shiny app with a sidebar.    
-  
   # Application title
   column(3, offset = 4,
-  titlePanel("Logistic Map: f(x) = Rx(1-x)")
+         titlePanel("Logistic Map: f(x) = Rx(1-x)")
   ),
   br(),
   
   #add describtion of the application
   fluidRow(
     column(8, offset = 2,
-    h3('This app shows the bifurcation diagram, the Lyapanuv exponent, the logistic map and the cobweb plot
+           h3('This app shows the bifurcation diagram, the Lyapanuv exponent, the logistic map and the cobweb plot
                   of the function F(x) = Rx(1-x). The growth factor r can be adjusted via the sliders. This app was created 
                   by Moritz Kaufmann for the assignemt of the course Physisc of Life from UZH.'))
   ),
   br(),
   
-  
-  #show a bifurkation diagram
+  #Add the layout to show the bifurcation diagram
+  h3('Bifurcation diagram of the logistic map'),
   fluidRow(
     column(8, offset = 2,
-    img(src="bifurcation.png", height="1000" ) )),
+           img(src="bifurcation.png", height="700" ) )),
   br(),
   
-  
-  #show the Lyapanuv Exponent
-  h3('Lyapanuv Exponent', position = 'center'),
+  #Add the laxout for the slider and the Lyapunuv exponent
+  h3('Lyapunuv Exponent', position = 'center'),
   br(),
   fluidRow(
     column(2, sliderInput("r",
@@ -101,8 +104,7 @@ ui = shinyUI(fluidPage(
   ),
   br(),
   
-  
-  #show the Coweb Plot
+  #Add the layout and the slider for the Coweb plot
   h3('Coweb Plot'),
   br(),
   fluidRow(
@@ -112,42 +114,37 @@ ui = shinyUI(fluidPage(
                          max = 4,
                          value=c(2),
                          step = 0.1
-      
     )),
     column(10,plotOutput('coweb'))
   ),
   br(),
   
-  
-  #show the Logistic Map
+  #Add the layout and the slider for the logistic map
   h3('Logistic Map'),
   br(),
   fluidRow(
     column(2,sliderInput("conv",
-                       label="Growth rate r:",
-                       min = 0,
-                       max = 4,
-                       value=c(2),
-                       step = 0.1
-           )),
+                         label="Growth rate r:",
+                         min = 0,
+                         max = 4,
+                         value=c(2),
+                         step = 0.1
+    )),
     column(10, plotOutput('conv'))
   )
-
-  
 ))
 
+#creat the server function for the shiny app
 server = shinyServer(function(input, output) {
   
-  # Expression that generates a histogram. The expression is
-  # wrapped in a call to renderPlot to indicate that:
-  #
-  #  1) It is "reactive" and therefore should re-execute automatically
-  #     when inputs change
-  #  2) Its output type is a plot
+  #add a seed for constant results
   set.seed(1234)
   
   output$distPlot <- renderPlot({
     
+    #create the plot for the lyapanuv exponent
+    #the function was written by Nicole Radziwill and found on
+    #https://qualityandinnovation.com/wp-content/uploads/2019/09/logistic-growth.html
     x <- seq(min(input$r),max(input$r),0.01)
     
     #define the starting points as 0
@@ -174,11 +171,13 @@ server = shinyServer(function(input, output) {
     
   })
   
+  #add the coweb plot to the shiny app
   output$coweb = renderPlot({
     logistic.cobweb(input$coweb)
     
   })
   
+  #add the logistic map to the shiny app
   output$conv= renderPlot({
     iter <- logistic.map(input$conv,.01,20,20) 
     ggplot(data.frame(index=1:length(iter), logistic.map=iter), aes(x=index,y=logistic.map)) + geom_line()+theme_bw()
@@ -187,5 +186,3 @@ server = shinyServer(function(input, output) {
 })
 
 shinyApp(ui, server)
-
-
