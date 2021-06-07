@@ -69,7 +69,7 @@ logistic.cobweb <- function(r, N=100) {
 ui = shinyUI(fluidPage(
   # Application title
   column(3, offset = 4,
-         titlePanel("Logistic Map: f(x) = Rx(1-x)")
+         titlePanel("Visualization of the logistic map")
   ),
   br(),
   
