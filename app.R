@@ -87,7 +87,7 @@ ui = shinyUI(fluidPage(
            img(src="bifurcation.png", height="700" ) )),
   br(),
   
-  #Add the laxout for the slider and the Lyapunuv exponent
+  #Add the laxout for the zoomable lyapunov plot
   h3('Lyapunuv Exponent', position = 'center'),
   br(),
   fluidRow(
@@ -136,7 +136,9 @@ ui = shinyUI(fluidPage(
 #creat the server function for the shiny app
 server = shinyServer(function(input, output) {
   
+  #set the ranges for the lyapunov plot
   ranges <- reactiveValues(x = NULL, y = NULL)
+  
   #add a seed for constant results
   set.seed(1234)
   
@@ -144,12 +146,12 @@ server = shinyServer(function(input, output) {
     #create the plot for the lyapanuv exponent
     #the function was written by Nicole Radziwill and found on
     #https://qualityandinnovation.com/wp-content/uploads/2019/09/logistic-growth.html
-    x <- seq(min(0.1),max(4),0.01)
+    x <- seq(min(0),max(4),0.01)
     
     #define the starting points as 0
     XI <- lya <- 0
     
-    # Create 401 different logistic maps for r=0.00 to 4.00 and get one Lyapunov exponent (lya) from each
+    # Create different logistic maps for r=0.00 to 4.00 and get one Lyapunov exponent (lya) from each
     for (i in 1:length(x)) {
       xi <- logistic.map(x[i],.01,500,500)
       XI <- rbind(XI,xi)
