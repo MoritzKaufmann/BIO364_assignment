@@ -105,7 +105,7 @@ ui = shinyUI(fluidPage(
   br(),
   
   #Add the layout and the slider for the Coweb plot
-  h3('Coweb Plot'),
+  h3('Cobweb Plot'),
   br(),
   fluidRow(
     column(2,sliderInput("coweb",
