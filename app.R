@@ -89,6 +89,7 @@ ui = shinyUI(fluidPage(
   
   #Add the laxout for the zoomable lyapunov plot
   h3('Lyapunuv Exponent', position = 'center'),
+  h5('Select a region of interest and double click it to zoom in.'),
   br(),
   fluidRow(
     column(10, offset = 2,
@@ -105,6 +106,7 @@ ui = shinyUI(fluidPage(
   
   #Add the layout and the slider for the Coweb plot
   h3('Cobweb Plot'),
+  h5('Adjust the growth rate via the slider.'),
   br(),
   fluidRow(
     column(2,sliderInput("coweb_slider",
@@ -120,6 +122,7 @@ ui = shinyUI(fluidPage(
   
   #Add the layout and the slider for the logistic map
   h3('Logistic Map'),
+  h5('Adjust the growth rate via the slider.'),
   br(),
   fluidRow(
     column(2,sliderInput("logmap_slider",
@@ -136,17 +139,17 @@ ui = shinyUI(fluidPage(
 #creat the server function for the shiny app
 server = shinyServer(function(input, output) {
   
-  #set the ranges for the lyapunov plot
-  ranges <- reactiveValues(x = NULL, y = NULL)
-  
   #add a seed for constant results
   set.seed(1234)
+  
+  #set the ranges for the lyapunov plot
+  ranges <- reactiveValues(x = NULL, y = NULL)
   
   output$lyapunov_plot <- renderPlot({
     #create the plot for the lyapanuv exponent
     #the function was written by Nicole Radziwill and found on
     #https://qualityandinnovation.com/wp-content/uploads/2019/09/logistic-growth.html
-    x <- seq(min(0),max(4),0.01)
+    x <- seq(min(0.1),max(4),0.01)
     
     #define the starting points as 0
     XI <- lya <- 0
