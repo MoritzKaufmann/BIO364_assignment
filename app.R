@@ -41,10 +41,7 @@ logistic.cobweb <- function(r, N=100) {
   orbit.df <- as_tibble(cbind(x[2:N], unlist(x_next)))
   
   p <- orbit.df %>% ggplot() + geom_line(aes(x=V1, y=V2), col='red', size=2) + 
-    xlab(expression(x[t])) + ylab(expression(x[t+1])) + 
-    theme(axis.title.x=element_text(colour='black', size=18)) +
-    theme(axis.title.y=element_text(colour='black', size=18)) +
-    theme(legend.position="none") 
+    xlab(expression(x[t])) + ylab(expression(x[t+1]))
   
   start=runif(1,0,1)
   
@@ -61,7 +58,7 @@ logistic.cobweb <- function(r, N=100) {
       start=r*start*(1-start)
     }
   }
-  p + geom_segment(data=seg_df, aes(x=x, xend=xend, y=y, yend=yend))+theme_bw()
+  p + geom_segment(data=seg_df, aes(x=x, xend=xend, y=y, yend=yend))+theme_bw()+theme(axis.title=element_text(size = 18))
 }
 
 #create the layout for the shiny app
@@ -167,7 +164,7 @@ server = shinyServer(function(input, output) {
                                     max(df_lya$lya))) + 
       ylab(expression(paste('Lyapunov exponent  ', lambda)))+
       xlab(expression(paste('Growth rate ', italic('r'))))+
-      theme_bw()
+      theme_bw()+theme(axis.title=element_text(size = 18))
     
   })
   
@@ -179,8 +176,9 @@ server = shinyServer(function(input, output) {
   
   #add the logistic map to the shiny app
   output$conv= renderPlot({
-    iter <- logistic.map(input$conv,.01,20,20) 
-    ggplot(data.frame(index=1:length(iter), logistic.map=iter), aes(x=index,y=logistic.map)) + geom_line()+theme_bw()
+    iter <- logistic.map(input$conv,.01,100,100) 
+    ggplot(data.frame(index=1:length(iter), logistic.map=iter), aes(x=index,y=logistic.map)) + geom_line()+theme_bw()+
+      xlab('Iteration')+ ylab('Population value')+theme(axis.title=element_text(size = 18))
     
   })
 })
