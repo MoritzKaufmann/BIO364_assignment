@@ -91,14 +91,15 @@ ui = shinyUI(fluidPage(
   h3('Lyapunuv Exponent', position = 'center'),
   br(),
   fluidRow(
-    column(2, sliderInput("lyapunov_slider",
-                          label="Growth rate r:",
-                          min = 0,
-                          max = 4,
-                          value=c(0,4),
-                          step = 0.1),
-    ),
-    column(10,plotOutput("lyapunov_plot"))
+    column(10, offset = 2,
+           plotOutput("lyapunov_plot",
+                      dblclick = "lyapunov_dblclick",
+                      brush = brushOpts(
+                        id = "lyapunov_brush",
+                        resetOnNew = TRUE
+                      )
+           )
+    )
   ),
   br(),
   
@@ -135,15 +136,15 @@ ui = shinyUI(fluidPage(
 #creat the server function for the shiny app
 server = shinyServer(function(input, output) {
   
+  ranges <- reactiveValues(x = NULL, y = NULL)
   #add a seed for constant results
   set.seed(1234)
   
   output$lyapunov_plot <- renderPlot({
-    
     #create the plot for the lyapanuv exponent
     #the function was written by Nicole Radziwill and found on
     #https://qualityandinnovation.com/wp-content/uploads/2019/09/logistic-growth.html
-    x <- seq(min(input$lyapunov_slider),max(input$lyapunov_slider),0.01)
+    x <- seq(min(0.1),max(4),0.01)
     
     #define the starting points as 0
     XI <- lya <- 0
@@ -165,8 +166,22 @@ server = shinyServer(function(input, output) {
                                     max(df_lya$lya))) + 
       ylab(expression(paste('Lyapunov exponent  ', lambda)))+
       xlab(expression(paste('Growth rate ', italic('r'))))+
-      theme_bw()+theme(axis.title=element_text(size = 18))
-    
+      theme_bw()+theme(axis.title=element_text(size = 18))+
+      coord_cartesian(xlim = ranges$x, ylim = ranges$y, expand = FALSE)
+  })
+  
+  # When a double-click happens, check if there's a brush on the plot.
+  # If so, zoom to the brush bounds; if not, reset the zoom.
+  observeEvent(input$lyapunov_dblclick, {
+    brush <- input$lyapunov_brush
+    if (!is.null(brush)) {
+      ranges$x <- c(brush$xmin, brush$xmax)
+      ranges$y <- c(brush$ymin, brush$ymax)
+      
+    } else {
+      ranges$x <- NULL
+      ranges$y <- NULL
+    }
   })
   
   #add the coweb plot to the shiny app
