@@ -91,14 +91,14 @@ ui = shinyUI(fluidPage(
   h3('Lyapunuv Exponent', position = 'center'),
   br(),
   fluidRow(
-    column(2, sliderInput("r",
+    column(2, sliderInput("lyapunov_slider",
                           label="Growth rate r:",
                           min = 0,
                           max = 4,
                           value=c(0,4),
                           step = 0.1),
     ),
-    column(10,plotOutput("distPlot"))
+    column(10,plotOutput("lyapunov_plot"))
   ),
   br(),
   
@@ -106,14 +106,14 @@ ui = shinyUI(fluidPage(
   h3('Cobweb Plot'),
   br(),
   fluidRow(
-    column(2,sliderInput("coweb",
+    column(2,sliderInput("coweb_slider",
                          label="Growth rate r:",
                          min = 0,
                          max = 4,
                          value=c(2),
                          step = 0.1
     )),
-    column(10,plotOutput('coweb'))
+    column(10,plotOutput('coweb_plot'))
   ),
   br(),
   
@@ -121,14 +121,14 @@ ui = shinyUI(fluidPage(
   h3('Logistic Map'),
   br(),
   fluidRow(
-    column(2,sliderInput("conv",
+    column(2,sliderInput("logmap_slider",
                          label="Growth rate r:",
                          min = 0,
                          max = 4,
                          value=c(2),
                          step = 0.1
     )),
-    column(10, plotOutput('conv'))
+    column(10, plotOutput('logmap_plot'))
   )
 ))
 
@@ -138,12 +138,12 @@ server = shinyServer(function(input, output) {
   #add a seed for constant results
   set.seed(1234)
   
-  output$distPlot <- renderPlot({
+  output$lyapunov_plot <- renderPlot({
     
     #create the plot for the lyapanuv exponent
     #the function was written by Nicole Radziwill and found on
     #https://qualityandinnovation.com/wp-content/uploads/2019/09/logistic-growth.html
-    x <- seq(min(input$r),max(input$r),0.01)
+    x <- seq(min(input$lyapunov_slider),max(input$lyapunov_slider),0.01)
     
     #define the starting points as 0
     XI <- lya <- 0
@@ -170,14 +170,14 @@ server = shinyServer(function(input, output) {
   })
   
   #add the coweb plot to the shiny app
-  output$coweb = renderPlot({
-    logistic.cobweb(input$coweb)
+  output$coweb_plot = renderPlot({
+    logistic.cobweb(input$coweb_slider)
     
   })
   
   #add the logistic map to the shiny app
-  output$conv= renderPlot({
-    iter <- logistic.map(input$conv,.01,100,100) 
+  output$logmap_plot= renderPlot({
+    iter <- logistic.map(input$logmap_slider,.01,100,100) 
     ggplot(data.frame(index=1:length(iter), logistic.map=iter), aes(x=index,y=logistic.map)) + geom_line()+theme_bw()+
       xlab('Iteration')+ ylab('Population value')+theme(axis.title=element_text(size = 18))
     
