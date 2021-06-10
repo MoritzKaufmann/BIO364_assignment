@@ -88,7 +88,7 @@ ui = shinyUI(fluidPage(
   br(),
   
   #Add the laxout for the zoomable lyapunov plot
-  h3('Lyapunuv Exponent', position = 'center'),
+  h3('Lyapunov Exponent', position = 'center'),
   h5('Select a region of interest and double click it to zoom in.'),
   br(),
   fluidRow(
