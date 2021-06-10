@@ -74,7 +74,7 @@ ui = shinyUI(fluidPage(
   fluidRow(
     column(8, offset = 2,
            h3('This app shows the bifurcation diagram, the Lyapanuv exponent, the logistic map and the cobweb plot
-                  of the logistic map. The growth factor r can be adjusted via the sliders. The starting value for the
+                  of the logistic map. The starting value for the
                   logistic map is set to 0.01. For the best view the dashboard should be run in full screen mode.
               This app was created by Moritz Kaufmann for the assignemt of the course Physisc of Life from UZH.'))
   ),
